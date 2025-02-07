@@ -1,0 +1,14 @@
+
+body {
+    background: url(https://i.pinimg.com/originals/d7/26/cd/d726cdb6d597af61898a7fb3c6ade07d.gif);
+      overflow: hidden;
+      position: relative;
+}
+
+h1 {
+    color: black;
+}
+
+p {
+    color: rgb(177, 98, 38);
+}
