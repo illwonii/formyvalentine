@@ -1,11 +1,235 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <link rel="stylesheet" href="style.css">
-        <title>Happy Valentines!</title>
-    </head>
-    <body>
-        <h1>hey pretty boy.</h1>
-        <p>hey baby, i love you.</p>
-    </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="https://mypillowfort.net/media3/tumblr_bdd2e722eb34e874bdf35128c38ed99c_693c6c20_75.gif">
+    <title>(⌒ω⌒) . Happy Valentines</title>
+</head>
+<body>
+
+    <!-- BACKGROUND MUSIC -->
+    <audio id="background-music" src="resources/Clairo - Flaming Hot Cheetos (Instrumental).mp3" autoplay loop></audio>
+
+    <!-- TEXTS -->
+    <h1>( ´` )♡ Happy Valentines.</h1>
+
+    <!-- ELEMENTS -->
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="header">
+            <input type="text" id="searchBar" class="search-bar" onkeyup="filterSuggestions()" placeholder="⌕ search . . .">
+            <ul id="suggestionsList" class="suggestions">
+                <li data-link="page1.html">Page 1</li>
+                <li data-link="page2.html">Page 2</li>
+                <li data-link="page3.html">Page 3</li>
+            </ul>
+            <div class="icons">
+                <img src="https://mypillowfort.net/media3/tumblr_8115b34dc50c5a8d04465fa014bcecd7_91f014fc_75.gif" alt="music note">
+            </div>
+            <div class="seal">
+                <img src="https://mypillowfort.net/two2/tumblr_ltuzuawSpB1r2nnw5540.gif">
+            </div>
+            <select class="dropdown-menu" onchange="window.location.href=this.value;">
+                <option value="">select ...</option>
+                <option value="page1.html">Option 1</option>
+                <option value="page2.html">Option 2</option>
+                <option value="page3.html">Option 3</option>
+            </select>
+        </div>
+
+        <!-- MAIN CONTENT SECTION -->
+        <div class="content">
+            <div class="left-section"></div>
+            <div class="profile-image">
+                <img src="https://mypillowfort.net/media3/tumblr_86e08eacb7a2c30742d1bf5f6fc1abed_b6676670_100.gif" class="profile-image">
+            </div>
+            <div class="small-image"></div>
+            <img src="resources/online.png" class="small-image">
+            <p id="header" class="left-text">Hey baby, I love you.</p>
+        </div>
+        
+        <div class="right-section">
+            <button>Button 1</button>
+            <button>Button 2</button>
+            <p>tap to play ...</p>
+            <div class="album-container">
+                <div class="album" data-song="resources\beabadoobee - Glue Song (Official Music Video).mp3">
+                    <img src="https://i.pinimg.com/736x/f9/09/55/f90955c5965a5f875d99690fa38e3268.jpg" alt="Glue Song">
+                    <div class="song-title">Glue Song - Beabadoobee</div>
+                </div>
+        
+                <div class="album" data-song="resources/Clairo - Flamin Hot Cheetos.mp3">
+                    <img src="https://i.pinimg.com/736x/b7/67/03/b76703216b3dd5adc074b7c41ae8320b.jpg" alt="Hot Flamin Cheetos">
+                    <div class="song-title">Flamin Hot Cheetos - Clairo</div>
+                </div>
+        
+                <div class="album" data-song="resources/Hello_.mp3">
+                    <img src="https://i.scdn.co/image/ab67616d0000b273bf94e27360806b5aa5025f93" alt="Hello?">
+                    <div class="song-title">Hello? - Clairo</div>
+                </div>
+            </div>
+        
+            <audio id="audio-player"></audio>        
+        </div>
+
+        <!-- FOOTER -->
+        <div class="spotify">
+            <iframe style="border-radius: 12px"
+                src="https://open.spotify.com/embed/playlist/0kBcyddY8oEHa3pRsy52D3?utm_source=generator"
+                width="100%" height="100" frameBorder="0"
+                allowfullscreen=""
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+            </iframe>
+        </div>
+        <p class="left-text">© illwona for ash!!</p>
+
+    </div>
+
+    <img src="https://mypillowfort.net/media5/tumblr_ace137e4afe10e9090c839f452444524_b175a197_75.gif" class="right-img">
+    <p class="right-text glow">© illwona</p>
+
+    <!-- SCRIPT -->
+    <script>
+        let title = "  (⌒ω⌒) . i ෆ ash";
+        let speed = 50;
+        let index = 0;
+
+        function scrollTitle() {
+            document.title = title.substring(index) + title.substring(0, index);
+            index = (index + 1) % title.length;
+            setTimeout(scrollTitle, speed);
+        }
+
+        scrollTitle();
+
+        document.addEventListener("DOMContentLoaded", () => {
+    const albums = document.querySelectorAll(".album");
+    const audioPlayer = document.getElementById("audio-player");
+    const backgroundMusic = document.getElementById("background-music");
+
+    let isPlaying = false; // Track if an album song is playing
+
+    function fadeOutAudio(audio, callback) {
+        let volume = audio.volume;
+        const fadeInterval = setInterval(() => {
+            if (volume > 0.05) {
+                volume -= 0.05;
+                audio.volume = volume;
+            } else {
+                clearInterval(fadeInterval);
+                audio.pause();
+                audio.volume = 1;
+                if (callback) callback();
+            }
+        }, 100);
+    }
+
+    albums.forEach(album => {
+        album.addEventListener("click", () => {
+            const songSrc = album.getAttribute("data-song");
+
+            // If the same song is clicked again, do nothing
+            if (audioPlayer.src.includes(songSrc) && !audioPlayer.paused) {
+                return;
+            }
+
+            // Stop any currently playing song before playing a new one
+            if (!audioPlayer.paused) {
+                audioPlayer.pause();
+            }
+
+            fadeOutAudio(backgroundMusic, () => {
+                audioPlayer.src = songSrc;
+                audioPlayer.play();
+                isPlaying = true;
+            });
+        });
+    });
+
+    audioPlayer.addEventListener("play", () => {
+        isPlaying = true;
+        backgroundMusic.pause(); // Stop background music when an album song starts
+    });
+
+    audioPlayer.addEventListener("ended", () => {
+        isPlaying = false;
+        setTimeout(() => {
+            if (!isPlaying) {
+                backgroundMusic.play(); // Restart background music if no song is playing
+            }
+        }, 1000);
+    });
+
+    // Handle background music correctly on page load
+    window.addEventListener("load", () => {
+        backgroundMusic.volume = 0.3; // Set initial volume
+        backgroundMusic.play();
+    });
+
+    // Prevent background music from playing over album songs
+    document.addEventListener("click", () => {
+        if (!isPlaying && audioPlayer.paused) {
+            backgroundMusic.play();
+        }
+    });
+});
+
+        // Function to filter suggestions based on search input
+        function filterSuggestions() {
+            var input = document.getElementById("searchBar").value.toLowerCase();
+            var suggestionsList = document.getElementById("suggestionsList");
+            var suggestions = suggestionsList.getElementsByTagName("li");
+
+            var hasSuggestions = false;
+
+            // Loop through each suggestion and check if it matches the input
+            for (var i = 0; i < suggestions.length; i++) {
+                var suggestion = suggestions[i];
+                var text = suggestion.textContent || suggestion.innerText;
+
+                if (text.toLowerCase().indexOf(input) > -1) {
+                    suggestion.style.display = "block";  // Show matching suggestion
+                    hasSuggestions = true;
+                } else {
+                    suggestion.style.display = "none";  // Hide non-matching suggestion
+                }
+            }
+
+            // If no match, hide the suggestion list
+            if (!hasSuggestions) {
+                suggestionsList.style.display = "none";
+            } else {
+                suggestionsList.style.display = "block";  // Show suggestion list if there are matches
+            }
+        }
+
+        // When clicking on a suggestion, navigate to the corresponding page
+        document.getElementById("suggestionsList").addEventListener("click", function(event) {
+            if (event.target.tagName === "LI") {
+                var pageLink = event.target.getAttribute("data-link");
+                window.location.href = pageLink;  // Navigate to the page
+
+                // Hide suggestions after a click
+                setTimeout(function() {
+                    document.getElementById("suggestionsList").style.display = "none";
+                }, 100);  // Slight delay to ensure navigation happens first
+            }
+        });
+
+        // Hide suggestions list if user clicks outside of the search bar
+        document.addEventListener("click", function(event) {
+            var searchInput = document.getElementById("searchBar");
+            var suggestionsList = document.getElementById("suggestionsList");
+
+            // Check if the click was outside of both the search bar and suggestions
+            if (!searchInput.contains(event.target) && !suggestionsList.contains(event.target)) {
+                suggestionsList.style.display = "none";  // Hide suggestions when clicked outside
+            }
+        });
+    </script>
+
+</body>
 </html>
